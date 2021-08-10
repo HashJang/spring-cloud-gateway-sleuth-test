@@ -1,0 +1,34 @@
+server:
+  port: 8181
+spring:
+  application:
+    name: apiGateway
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 500
+        response-timeout: 60000
+      routes:
+        - id: first_route
+          uri: http://httpbin.org
+          predicates:
+              - Path=/httpbin/**
+          filters:
+              - StripPrefix=1
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    jmx:
+      exposure:
+        exclude: '*'
+    web:
+      base-path: /actuator
+      exposure:
+        include: '*'
